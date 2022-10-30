@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid';
 
 import UserModel from "../models/user.model";
-import { generateAccessToken, generateRefreshToken } from "../middleware/auth";
+import { generateAccessToken, generateRefreshToken, verifyAccessToken } from "../middleware/auth";
 
 export const registerUser = async (req: Request, res: Response) => {
    try {
@@ -32,7 +32,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
       res.status(200).json({ message: 'Successfully created!' })
    } catch (error) {
-      res.status(403).json({ message: error });
+      console.log(error)
+      res.status(403).json({ message: error })
    }
 }
 
@@ -55,6 +56,36 @@ export const loginUser = async (req: Request, res: Response) => {
 
       res.status(200).json({ accessToken, refreshToken })
    } catch (error) {
-      res.status(403).json({ message: error });
+      console.log(error)
+      res.status(403).json({ message: error })
+   }
+}
+
+export const getUser = async (req: Request, res: Response) => {
+   try {
+      const token = req.header('authorization');
+
+      if (token) {
+         const decodedData = verifyAccessToken(token.replace('Bearer ', ''))
+
+         if (decodedData) {
+            if (decodedData.error) {
+               res.status(400).json({ message: 'Access token is expired' })
+            }
+   
+            if (decodedData.email) {
+               const user = await UserModel.findOne({ email: decodedData.email })
+
+               if (!user) {
+                  res.status(400).json({ message: 'User not found' })
+               }
+
+               res.status(200).json({ user })
+            }
+         }
+      }
+   } catch (error) {
+      console.log(error)
+      res.status(403).json({ message: error })
    }
 }

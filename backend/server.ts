@@ -1,10 +1,9 @@
 import express from 'express';
 import cors from 'cors'
 import * as dotenv from 'dotenv'
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 
 import UserRouter from './routes/user.route'
-
 
 const app = express();
 dotenv.config()
@@ -21,7 +20,9 @@ const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = process.env.MONGO_CONNECTION
 
 if (CONNECTION_URL) {
-    mongoose.connect(CONNECTION_URL)
+    mongoose.connect(CONNECTION_URL, {
+        useNewUrlParser: true,
+    } as ConnectOptions)
     .then(() => app.listen(PORT, () => console.log(`Server is running on port ${PORT}`)))
     .catch((error) => console.log(error.message));
 } else {

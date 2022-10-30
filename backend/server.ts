@@ -19,6 +19,10 @@ app.use('/', UserRouter)
 const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = process.env.MONGO_CONNECTION
 
+app.get('/test',function (req, res) {
+	res.status(200).json({ message: 'ok' });
+});
+
 if (CONNECTION_URL) {
     mongoose.connect(CONNECTION_URL, {
         useNewUrlParser: true,

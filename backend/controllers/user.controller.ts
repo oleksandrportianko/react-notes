@@ -44,7 +44,7 @@ export const loginUser = async (req: Request, res: Response) => {
          res.status(403).json('All fields is required')
       }
 
-      const user = UserModel.findOne({ email })
+      const user = await UserModel.findOne({ email: email })
 
       if (!user) {
          res.status(403).json('User not found')

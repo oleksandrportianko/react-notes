@@ -1,19 +1,25 @@
 import jwt from "jsonwebtoken"
 
-export function generateAccessToken(email: string) {
+export const generateAccessToken = (email: string) => {
     const secret =  process.env.TOKEN_SECRET
+
     if (secret) {
-        return jwt.sign(email, secret, { expiresIn: '180m' });
-    } else {
-        return Error('don`t have secret')
+        try {
+            return jwt.sign({ email }, secret, { expiresIn: '3h' });
+        } catch (error) {
+            console.log('error while generate access token', error)
+        }
     }
 }
 
-export function generateRefreshToken(email: string) {
+export const generateRefreshToken = (email: string) => {
     const secret =  process.env.TOKEN_SECRET
+
     if (secret) {
-        return jwt.sign(email, secret, { expiresIn: '520m' });
-    } else {
-        return Error('don`t have secret')
+        try {
+            return jwt.sign({ email }, secret, { expiresIn: '24h' });
+        } catch (error) {
+            console.log('error while generate refresh token', error)
+        }
     }
 }

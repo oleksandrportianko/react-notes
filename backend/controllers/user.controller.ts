@@ -65,23 +65,23 @@ export const getUser = async (req: Request, res: Response) => {
    try {
       const token = req.header('authorization');
 
+      console.log(token)
+
       if (token) {
-         const decodedData = verifyAccessToken(token.replace('Bearer ', ''))
+         const response = verifyAccessToken(token.replace('Bearer ', ''))
 
-         if (decodedData) {
-            if (decodedData.error) {
-               res.status(400).json({ message: 'Access token is expired' })
+         console.log('in if token', response)
+
+         if (response === 'Error in decode' || response === 'Don`t have secret') {
+            res.status(400).json({ message: 'Access token is expired or incorrect' })
+         } else {
+            const user = await UserModel.findOne({ email: response })
+
+            if (!user) {
+               res.status(400).json({ message: 'User not found' })
             }
-   
-            if (decodedData.email) {
-               const user = await UserModel.findOne({ email: decodedData.email })
 
-               if (!user) {
-                  res.status(400).json({ message: 'User not found' })
-               }
-
-               res.status(200).json({ user })
-            }
+            res.status(200).json({ user })
          }
       }
    } catch (error) {

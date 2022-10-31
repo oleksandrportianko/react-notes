@@ -1,12 +1,11 @@
-import jwt, { JwtPayload } from "jsonwebtoken"
-import { decode } from "punycode";
+import jwt from "jsonwebtoken"
 
 export const generateAccessToken = (email: string) => {
     const secret =  process.env.TOKEN_SECRET
 
     if (secret) {
         try {
-            return jwt.sign({ email }, secret, { expiresIn: '1m' });
+            return jwt.sign({ email }, secret, { expiresIn: '3h' });
         } catch (error) {
             console.log('Error while generate access token', error)
         }
@@ -30,19 +29,23 @@ type VerifyResponse = {
     email: string
 }
 
-export const verifyAccessToken = (token: string): VerifyResponse | void => {
+export const verifyAccessToken = (token: string): string => {
     const secret =  process.env.TOKEN_SECRET
 
     if (secret) {
         try {
             jwt.verify(token, secret, function(err, decoded) {
                 if (err) {
-                    return { error: err, email: null }
+                    return 'Error in decode'
                 }
-                return { error: null, email: (<any>decoded).email }
+
+                return (<any>decoded).email
             });
         } catch (error) {
             console.log('Error while verify access token', error)
+            return 'Error in decode'
         }
     }
+
+    return 'Don`t have secret'
 }

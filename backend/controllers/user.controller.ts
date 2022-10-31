@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid';
 
 import UserModel from "../models/user.model";
-import { generateAccessToken, generateRefreshToken, verifyAccessToken } from "../middleware/auth";
+import { generateAccessToken, generateRefreshToken, verifyToken } from "../middleware/auth";
 
 export const registerUser = async (req: Request, res: Response) => {
    try {
@@ -33,7 +33,6 @@ export const registerUser = async (req: Request, res: Response) => {
       res.status(200).json({ message: 'Successfully created!' })
    } catch (error) {
       console.log(error)
-      res.status(403).json({ message: error })
    }
 }
 
@@ -57,7 +56,6 @@ export const loginUser = async (req: Request, res: Response) => {
       res.status(200).json({ accessToken, refreshToken })
    } catch (error) {
       console.log(error)
-      res.status(403).json({ message: error })
    }
 }
 
@@ -65,27 +63,43 @@ export const getUser = async (req: Request, res: Response) => {
    try {
       const token = req.header('authorization');
 
-      console.log(token)
-
       if (token) {
-         const response = verifyAccessToken(token.replace('Bearer ', ''))
+         const response = verifyToken(token.replace('Bearer ', ''))
 
-         console.log('in if token', response)
-
-         if (response === 'Error in decode' || response === 'Don`t have secret') {
-            res.status(400).json({ message: 'Access token is expired or incorrect' })
-         } else {
-            const user = await UserModel.findOne({ email: response })
-
-            if (!user) {
-               res.status(400).json({ message: 'User not found' })
-            }
-
-            res.status(200).json({ user })
+         if (!response) {
+            res.status(403).json({ message: 'Access token is expired or incorrect' })
          }
+
+         const user = await UserModel.findOne({ email: response })
+
+         if (!user) {
+            res.status(403).json({ message: 'User not found' })
+         }
+
+         res.status(200).json({ user })
       }
    } catch (error) {
       console.log(error)
-      res.status(403).json({ message: error })
+   }
+}
+
+export const getNewAccessToken = async (req: Request, res: Response) => {
+   try {
+      const { refreshToken } = req.body
+
+      if (!refreshToken) {
+         res.status(403).json({ message: 'Refresh token is required' })
+      }
+
+      const response = verifyToken(refreshToken)
+
+      if (!response) {
+         res.status(403).json({ message: 'Refresh token is expired or incorrect' })
+      } else {
+         const newAccessToken = generateAccessToken(response)
+         res.status(201).json({ accessToken: newAccessToken })
+      }
+   } catch (error) {
+      console.log(error)
    }
 }

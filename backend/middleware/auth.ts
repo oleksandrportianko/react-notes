@@ -1,51 +1,37 @@
-import jwt from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 export const generateAccessToken = (email: string) => {
-    const secret =  process.env.TOKEN_SECRET
+    const secret = process.env.TOKEN_SECRET
 
     if (secret) {
         try {
             return jwt.sign({ email }, secret, { expiresIn: '3h' });
         } catch (error) {
-            console.log('Error while generate access token', error)
+            console.log(error)
         }
     }
 }
 
 export const generateRefreshToken = (email: string) => {
-    const secret =  process.env.TOKEN_SECRET
+    const secret = process.env.TOKEN_SECRET
 
     if (secret) {
         try {
             return jwt.sign({ email }, secret, { expiresIn: '24h' });
         } catch (error) {
-            console.log('Error while generate refresh token', error)
+            console.log(error)
         }
     }
 }
 
-type VerifyResponse = {
-    error: string,
-    email: string
-}
-
-export const verifyAccessToken = (token: string): string => {
-    const secret =  process.env.TOKEN_SECRET
-
-    if (secret) {
-        try {
-            jwt.verify(token, secret, function(err, decoded) {
-                if (err) {
-                    return 'Error in decode'
-                }
-
-                return (<any>decoded).email
-            });
-        } catch (error) {
-            console.log('Error while verify access token', error)
-            return 'Error in decode'
+export const verifyToken = (token: string): string | undefined => {
+    try {
+        const secret = process.env.TOKEN_SECRET
+        if (secret) {
+            const decodeResult = jwt.verify(token, secret) as JwtPayload
+            return decodeResult.email
         }
+    } catch (error) {
+        console.log(error)
     }
-
-    return 'Don`t have secret'
 }

@@ -1,16 +1,11 @@
-import { useAppDispatch } from '../../redux/hooks'
-import { registerUserThunk } from '../../redux/slices/auth.slice'
+import Header from "../../components/header/header.component"
+
+import './main.styles.css'
 
 const MainPage = () => {
-    const dispatch = useAppDispatch()
-
-    const handleRegisterUser = () => {
-        dispatch(registerUserThunk({ username: 'new', email: 'portianko@gmail.com', password: 'hello' }))
-    }
-
     return (
-        <div>
-            <button onClick={handleRegisterUser}>Register</button>
+        <div className="main-page-wrapper">
+            <Header />
         </div>
     )
 }

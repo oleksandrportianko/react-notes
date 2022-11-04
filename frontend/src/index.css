@@ -11,3 +11,77 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.btn-close:focus {
+  box-shadow: none;
+}
+
+button,
+input {
+  outline: none;
+  border: none;
+}
+
+.input-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color:rgb(34, 84, 128);
+}
+
+.input {
+  color: rgb(34, 84, 128);
+  border: 1px solid rgb(34, 84, 128);
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+
+.input-error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.modal-header {
+  padding: 10px 15px;
+}
+
+.modal-body {
+  padding: 5px 15px;
+}
+
+.modal-title {
+  color:rgb(34, 84, 128);
+  font-size: 1.2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.button-default {
+  border: none;
+  background-color: transparent;
+  border: 2px solid rgb(34, 84, 128);
+  color: rgb(34, 84, 128);
+  font-size: 1rem;
+  font-weight: 400;
+  transition: 1s;
+  min-width: 120px;
+}
+
+.button-default:hover {
+  background-color: rgb(34, 84, 128);
+  color: rgb(226, 234, 241);
+  transition: 1s;
+}
+
+.modal-footer {
+  border: none;
+  padding: 5px 15px;
+}

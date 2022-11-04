@@ -5,9 +5,8 @@ import { authService, UserRegisterData } from '../../api/auth.api'
 export const registerUserThunk = createAsyncThunk(
     'auth/registerUser',
     async (userData: UserRegisterData) => {
-        console.log(userData)
         const response = await authService.registerUser(userData)
-        console.log(response)
+        console.log('response', response)
         return response.data
     }
 )
@@ -27,14 +26,14 @@ export const authSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(registerUserThunk.pending, (state, { payload }) => {
-            console.log(payload)
+        builder.addCase(registerUserThunk.pending, (state, action) => {
+            console.log('pending', action)
         })
-        builder.addCase(registerUserThunk.fulfilled, (state, { payload }) => {
-            console.log(payload)
+        builder.addCase(registerUserThunk.fulfilled, (state, action) => {
+            console.log('fulfilled', action)
         })
-        builder.addCase(registerUserThunk.rejected, (state, { payload }) => {
-            console.log(payload)
+        builder.addCase(registerUserThunk.rejected, (state, action) => {
+            console.log('rejected', action)
         })
     },
 })

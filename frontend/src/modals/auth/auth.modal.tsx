@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { registerUserThunk } from '../../redux/slices/auth.slice';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { validator } from './validator';
 
 import './auth.styles.css'
+import Loader from '../../components/loader/loader.component';
 
 type AuthModalProps = {
     show: boolean,
@@ -23,14 +24,23 @@ type FormValues = {
 
 const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
     const [currentTab, setCurrentTab] = useState('register')
+    const isLoading = useAppSelector((state) => state.auth.isLoading)
 
     const dispatch = useAppDispatch()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: yupResolver(validator) });
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>({ resolver: yupResolver(validator) });
 
     const onSubmit = async (data: FormValues) => {
-        console.log(data)
         dispatch(registerUserThunk(data))
+        if (!isLoading) {
+            reset()
+        }
+    }
+    
+    if (isLoading) {
+        return (
+            <Loader />
+        )
     }
 
     return (
@@ -60,11 +70,11 @@ const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
                         <input type='password' className='input' {...register('confirmPassword')} />
                         {errors.confirmPassword && <p className='input-error'>{errors.confirmPassword.message}</p>}
                     </div>
+                    <div className='input-block align-items-end'>
+                        <button className='button-default'>Register</button>
+                    </div>
                 </form>
             </Modal.Body>
-            <Modal.Footer>
-                <button className='button-default'>Register</button>
-            </Modal.Footer>
         </Modal>
     )
 }

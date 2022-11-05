@@ -12,11 +12,11 @@ export const registerUserThunk = createAsyncThunk(
 )
 
 export interface AuthState {
-    value: number
+    isLoading: boolean,
 }
 
 const initialState: AuthState = {
-    value: 0,
+    isLoading: true,
 }
 
 export const authSlice = createSlice({
@@ -27,13 +27,13 @@ export const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(registerUserThunk.pending, (state, action) => {
-            console.log('pending', action)
+            state.isLoading = true
         })
         builder.addCase(registerUserThunk.fulfilled, (state, action) => {
-            console.log('fulfilled', action)
+            state.isLoading = false
         })
         builder.addCase(registerUserThunk.rejected, (state, action) => {
-            console.log('rejected', action)
+            state.isLoading = false
         })
     },
 })

@@ -70,7 +70,7 @@ export const getUser = async (req: Request, res: Response) => {
             res.status(403).json({ message: 'Access token is expired or incorrect' })
          }
 
-         const user = await UserModel.findOne({ email: response })
+         const user = await UserModel.findOne({ email: response }, { password: 0, _id: 0, __v: 0 })
 
          if (!user) {
             res.status(403).json({ message: 'User not found' })

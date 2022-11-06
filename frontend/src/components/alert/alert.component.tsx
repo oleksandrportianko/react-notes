@@ -8,6 +8,7 @@ import './alert.styles.css'
 const Alert = () => {
     const show = useAppSelector((state) => state.alert.show)
     const text = useAppSelector((state) => state.alert.text)
+    const type = useAppSelector((state) => state.alert.type)
 
     const dispatch = useAppDispatch()
 
@@ -22,7 +23,7 @@ const Alert = () => {
     }
 
     return (
-        <div className='alert-container'>
+        <div className={ type === 'success' ? 'alert-container alert-success' : 'alert-container alert-error'}>
             {text}
             <img onClick={hideAllert} className='close-image' src={closeSvg} alt="" />
         </div>

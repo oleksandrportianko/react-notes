@@ -2,7 +2,6 @@
     width: 400px;
     min-height: 50px;
     border-radius: 20px;
-    background-color: rgb(156, 233, 42);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -18,4 +17,12 @@
     width: 15px;
     height: 15px;
     cursor: pointer;
+}
+
+.alert-success {
+    background-color: rgb(156, 233, 42);
+}
+
+.alert-error {
+    background-color: rgb(232, 26, 26);
 }

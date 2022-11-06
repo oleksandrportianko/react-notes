@@ -1,0 +1,12 @@
+.have-account-block {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.blue-link {
+    color: blueviolet;
+    text-decoration: underline;
+    margin-left: 5px;
+    cursor: pointer;
+}

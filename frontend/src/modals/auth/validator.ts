@@ -6,3 +6,8 @@ export const validator = yup.object().shape({
   password: yup.string().min(5).required('123'),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null], '123')
 })
+
+export const validatorLogin = yup.object().shape({
+  email: yup.string().required(),
+  password: yup.string().required(),
+})

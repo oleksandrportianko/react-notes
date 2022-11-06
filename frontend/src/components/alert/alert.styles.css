@@ -1,0 +1,21 @@
+.alert-container {
+    width: 400px;
+    min-height: 50px;
+    border-radius: 20px;
+    background-color: rgb(156, 233, 42);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: black;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    transition: 1s;
+}
+
+.close-image {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}

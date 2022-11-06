@@ -1,22 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 import { authService, UserRegisterData } from '../../api/auth.api'
 
 export const registerUserThunk = createAsyncThunk(
     'auth/registerUser',
     async (userData: UserRegisterData) => {
         const response = await authService.registerUser(userData)
-        console.log('response', response)
         return response.data
     }
 )
 
 export interface AuthState {
     isLoading: boolean,
+    error: string,
 }
 
 const initialState: AuthState = {
-    isLoading: true,
+    isLoading: false,
+    error: '',
 }
 
 export const authSlice = createSlice({
@@ -34,6 +34,7 @@ export const authSlice = createSlice({
         })
         builder.addCase(registerUserThunk.rejected, (state, action) => {
             state.isLoading = false
+            state.error = 'Error when register user'
         })
     },
 })

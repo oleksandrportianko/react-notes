@@ -3,10 +3,12 @@ import logger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 
 import authReducer from './slices/auth.slice'
+import alertReducer from './slices/alert.slice'
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
+        alert: alertReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger, thunkMiddleware)
 })

@@ -39,7 +39,8 @@ export const getUserThunk = createAsyncThunk(
             return response
         } else if (!accessToken && refreshToken) {
             const responseRefresh = await authService.getNewAccessToken(refreshToken)
-            const response = await authService.getUser(responseRefresh.data.refreshToken)
+            cookies.set('accessToken', responseRefresh.data.accessToken)
+            const response = await authService.getUser(responseRefresh.data.accessToken)
             return response
         } else {
             console.log('user login tilt')
@@ -75,7 +76,9 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-
+        closeError(state) {
+            state.error = ''
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(registerUserThunk.pending, (state, action) => {
@@ -131,6 +134,6 @@ export const authSlice = createSlice({
     },
 })
 
-export const { } = authSlice.actions
+export const { closeError } = authSlice.actions
 
 export default authSlice.reducer

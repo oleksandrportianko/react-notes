@@ -13,7 +13,6 @@ function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    console.log('here')
     dispatch(getUserThunk())
   }, [])
 

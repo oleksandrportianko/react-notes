@@ -3,12 +3,14 @@ import { Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { loginUserThunk, registerUserThunk } from '../../redux/slices/auth.slice';
+import { closeError, loginUserThunk, registerUserThunk } from '../../redux/slices/auth.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { showAlert } from '../../redux/slices/alert.slice';
 import { validator, validatorLogin } from './validator';
 
 import Loader from '../../components/loader/loader.component';
+
+import closeSvg from '../../assets/close.svg'
 
 import './auth.styles.css'
 
@@ -40,6 +42,10 @@ const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
 
     const { register: registerLogin, handleSubmit: handleSubmitLogin, reset: resetLogin, formState: { errors: errorsLogin } } = useForm<FormLoginValue>({ resolver: yupResolver(validatorLogin) });
 
+    const closeAuthError = () => {
+        dispatch(closeError())
+    }
+    
     const changeTabToLogin = () => {
         setCurrentTab('login')
     }
@@ -49,18 +55,17 @@ const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
     }
 
     const onSubmit = async (data: FormValues) => {
-        dispatch(registerUserThunk(data))
-        if (!isLoading) {
+        const res = await dispatch(registerUserThunk(data))
+        if (!isLoading && !error && res) {
             reset()
             onHide()
             dispatch(showAlert({ text: 'User successfully created, you can login now!', type: 'success' }))
         }
     }
 
-    const onSubmitLogin = (data: FormLoginValue) => {
-        console.log(data)
-        dispatch(loginUserThunk(data))
-        if (!isLoading) {
+    const onSubmitLogin = async (data: FormLoginValue) => {
+        const res = await dispatch(loginUserThunk(data))
+        if (res && res.payload.user) {
             resetLogin()
             onHide()
         }
@@ -72,6 +77,14 @@ const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
                 <Modal.Title>{currentTab === 'login' ? 'SIGN IN' : 'SIGN UP'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                {
+                    error && (
+                        <div className='auth-error-block'>
+                            {error}
+                            <img onClick={closeAuthError} src={closeSvg} width={15} height={15} alt="" />
+                        </div>
+                    )
+                }
                 {
                     isLoading ? (
                         <Loader />

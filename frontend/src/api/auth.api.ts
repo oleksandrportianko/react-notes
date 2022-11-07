@@ -35,6 +35,6 @@ export const authService = {
         })
     },
     getNewAccessToken(refreshToken: string) {
-        return instance.post(`/api/get_new_access_token/`, refreshToken)
+        return instance.post(`/api/get_new_access_token/`, { refreshToken: refreshToken })
     },
 }

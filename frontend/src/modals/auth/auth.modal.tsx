@@ -50,7 +50,7 @@ const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
 
     const onSubmit = async (data: FormValues) => {
         dispatch(registerUserThunk(data))
-        if (!isLoading && !error) {
+        if (!isLoading) {
             reset()
             onHide()
             dispatch(showAlert({ text: 'User successfully created, you can login now!', type: 'success' }))
@@ -60,7 +60,7 @@ const AuthModal: FC<AuthModalProps> = ({ show, onHide }) => {
     const onSubmitLogin = (data: FormLoginValue) => {
         console.log(data)
         dispatch(loginUserThunk(data))
-        if (!isLoading && !error) {
+        if (!isLoading) {
             resetLogin()
             onHide()
         }

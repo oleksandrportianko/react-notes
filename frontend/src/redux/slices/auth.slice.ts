@@ -23,7 +23,8 @@ export const loginUserThunk = createAsyncThunk(
         const response = await authService.loginUser(userData)
         cookies.set('accessToken', response.data.accessToken)
         cookies.set('refreshToken', response.data.refreshToken)
-        return response.data
+        const userResponse = await authService.getUser(response.data.accessToken)
+        return userResponse.data
     }
 )
 
@@ -43,6 +44,16 @@ export const getUserThunk = createAsyncThunk(
         } else {
             console.log('user login tilt')
         }
+    }
+)
+
+export const logoutUserThunk = createAsyncThunk(
+    'auth/logout',
+    async () => {
+        const cookies = new Cookies()
+        cookies.remove('accessToken')
+        cookies.remove('refershToken')
+        return true
     }
 )
 
@@ -83,6 +94,7 @@ export const authSlice = createSlice({
         builder.addCase(loginUserThunk.fulfilled, (state, action) => {
             state.isLoading = false
             state.isAuth = true
+            state.user = action.payload.user
         })
         builder.addCase(loginUserThunk.rejected, (state, action) => {
             state.isLoading = false
@@ -101,6 +113,20 @@ export const authSlice = createSlice({
             state.isAuth = false
             state.user = null
             state.error = 'Error when get user'
+        })
+        builder.addCase(logoutUserThunk.pending, (state, action) => {
+            state.isLoading = true
+        })
+        builder.addCase(logoutUserThunk.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.user = null
+            state.isAuth = false
+        })
+        builder.addCase(logoutUserThunk.rejected, (state, action) => {
+            state.isLoading = false
+            state.isAuth = false
+            state.user = null
+            state.error = 'Error when logout user'
         })
     },
 })

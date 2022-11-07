@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { useAppSelector } from '../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { logoutUserThunk } from '../../redux/slices/auth.slice'
 
 import AuthModal from '../../modals/auth/auth.modal'
 
@@ -10,12 +11,18 @@ const Header = () => {
     const [authModal, setAuthModal] = useState<boolean>(false)
     const user = useAppSelector((state) => state.auth.user)
 
+    const dispatch = useAppDispatch()
+
     const handleCloseAuthModal = () => {
         setAuthModal(false)
     }
 
     const handleShowAuthModal = () => {
         setAuthModal(true)
+    }
+
+    const handleLogout = () => {
+        dispatch(logoutUserThunk())
     }
 
     return (
@@ -25,7 +32,9 @@ const Header = () => {
             </div>
             <div className='header-auth'>
                 {
-                    user ? user.username : (
+                    user ? (
+                        <button onClick={handleLogout} className='button-default'>LOG OUT</button>
+                    ) : (
                         <button onClick={handleShowAuthModal} className='button-default'>SIGN IN / SIGN UP</button>
                     ) 
                 }

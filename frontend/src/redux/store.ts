@@ -10,7 +10,7 @@ export const store = configureStore({
         auth: authReducer,
         alert: alertReducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger, thunkMiddleware)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false, }).concat(logger, thunkMiddleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

@@ -48,12 +48,20 @@ export const loginUser = async (req: Request, res: Response) => {
 
       if (!user) {
          res.status(403).json('User not found')
+      } else {
+         bcrypt.compare(password, user.password, (err, data) => {
+            if (err) throw err
+
+            if (data) {
+               const accessToken = generateAccessToken(email)
+               const refreshToken = generateRefreshToken(email)
+
+               return res.status(200).json({ accessToken, refreshToken })
+            } else {
+               return res.status(401).json({ message: "Invalid password" })
+            }
+         })
       }
-
-      const accessToken = generateAccessToken(email)
-      const refreshToken = generateRefreshToken(email)
-
-      res.status(200).json({ accessToken, refreshToken })
    } catch (error) {
       console.log(error)
    }

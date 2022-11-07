@@ -37,16 +37,23 @@
     font-size: 1rem;
     margin-left: 5px;
     font-weight: 500;
+    user-select: none;
+}
+
+.folder-item-name:hover {
+    color: rgb(50, 28, 106);
 }
 
 .explorer-path-block {
     display: flex;
     cursor: pointer;
     margin-bottom: 10px;
+    user-select: none;
 }
 
 .explorer-path-item {
     color: rgb(50, 28, 106);
+    user-select: none;
 }
 
 .explorer-path-item:hover {

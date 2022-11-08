@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv'
 import mongoose, { ConnectOptions } from 'mongoose';
 
 import UserRouter from './routes/user.route'
+import ExplorerRouter from './routes/explorer.route'
 
 const app = express();
 dotenv.config()
@@ -14,7 +15,9 @@ app.use(cors({
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
 app.use(express.json());
+
 app.use('/', UserRouter)
+app.use('/', ExplorerRouter)
 
 const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = process.env.MONGO_CONNECTION
